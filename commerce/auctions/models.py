@@ -7,21 +7,29 @@ from django.db.models.fields import related
 class User(AbstractUser):
     pass
 
-class Bids(models.Model):
+class Bid(models.Model):
     price = models.FloatField()
-
-
-class Comments(models.Model):
-    user = models.CharField(max_length=64)
-    #user = models.ManyToManyField(User,blank=False,related_name="users")
-    comment = models.TextField()
-
-
-class Listings(models.Model):
-    name = models.CharField(max_length=64)
-    current_bid = models.ForeignKey(Bids, on_delete=models.CASCADE, related_name="bids")
-    comments = models.ForeignKey(Comments, on_delete=models.CASCADE, related_name="comments")
-    number_of_bids = models.IntegerField()
+    number_of_bids = models.IntegerField(default=0)
 
     def __str__(self):
-        return f"{self.name} {self.price}"
+        return f"{self.price}: {self.number_of_bids}"
+
+class Comment(models.Model):
+    user = models.CharField(max_length=64, default="user")
+    #user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="users")
+    comment = models.TextField()
+
+    def __str__(self):
+        return f"{self.user}: {self.comment}"
+
+
+class Listing(models.Model):
+    title = models.CharField(max_length=64)
+    starting_bid = models.FloatField(default=0)
+    bids = models.ManyToManyField(Bid, blank=True,related_name="bids")
+    comments = models.ManyToManyField(Comment,blank=True, related_name="comments")
+    description = models.TextField(default="description")
+
+    def __str__(self):
+        return f"{self.title} {self.starting_bid}"
+
