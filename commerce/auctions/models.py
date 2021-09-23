@@ -24,11 +24,21 @@ class Comment(models.Model):
 
 
 class Listing(models.Model):
+    class Categories(models.TextChoices):
+        TOYS = 'toys'
+        ELETRONICS = 'eletronics'
+        FASHION = 'fashion'
+        HOME = 'home'
+        SPORTS = 'sports'
+
     title = models.CharField(max_length=64)
-    starting_bid = models.FloatField(default=0)
+    image = models.CharField(max_length=500,blank=True)
+    starting_bid = models.FloatField()
     bids = models.ManyToManyField(Bid, blank=True,related_name="bids")
     comments = models.ManyToManyField(Comment,blank=True, related_name="comments")
-    description = models.TextField(default="description")
+    description = models.TextField(blank = False)
+    category = models.CharField(max_length=64, choices=Categories.choices, default='varied') 
+    
 
     def __str__(self):
         return f"{self.title} {self.starting_bid}"

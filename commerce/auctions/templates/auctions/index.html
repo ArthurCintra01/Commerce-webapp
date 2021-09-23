@@ -1,10 +1,48 @@
 {% extends "auctions/layout.html" %}
 
+{% block style %}
+<style>
+    .items{
+        color: black;
+        background-color: #fff;
+        padding: 10px;
+        border: 1px solid #c0c0c0;
+        border-style: inset;
+    }
+    .items:hover{
+        border-style: outset;
+    }
+    a:link { text-decoration: none; }
+
+    a:visited { text-decoration: none; }
+
+    a:hover { text-decoration: none; }
+
+    a:active { text-decoration: none; } 
+</style>
+{% endblock %}
+
 {% block body %}
     <h2>Active Listings</h2>
-    <ul>
+    <br>
+    <ul style="list-style-type: none;">
         {% for item in Listings %}
-            <li>{{item}}</li>
+            <li>
+                <a href="">
+                    <div class="items">
+                        <h3>{{item.title}}</h3>
+                        {% if item.image %}
+                            <img alt="No image" src={{item.image}} width='150' height="120"><br>
+                        {% endif %}
+                        Starting bid: ${{item.starting_bid}}<br>
+                        Description: {{item.description}}<br>
+                        Category: {{item.category}}
+                    </div>
+                </a>
+            </li>
+            <br>
+            {% empty %}
+            <li>No listings available</li>
         {% endfor %}
     </ul>
 {% endblock %}
