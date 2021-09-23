@@ -15,31 +15,29 @@ class Bid(models.Model):
         return f"{self.price}: {self.number_of_bids}"
 
 class Comment(models.Model):
-    user = models.CharField(max_length=64, default="user")
-    #user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="users")
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="users")
     comment = models.TextField()
 
     def __str__(self):
         return f"{self.user}: {self.comment}"
 
+class Category(models.Model):
+    category = models.CharField(max_length=64)
+
+    def __str__(self):
+        return f"{self.category}"
+
 
 class Listing(models.Model):
-    class Categories(models.TextChoices):
-        TOYS = 'toys'
-        ELETRONICS = 'eletronics'
-        FASHION = 'fashion'
-        HOME = 'home'
-        SPORTS = 'sports'
 
     title = models.CharField(max_length=64)
-    image = models.CharField(max_length=500,blank=True)
+    image = models.URLField(max_length=500,blank=True)
     starting_bid = models.FloatField()
-    bids = models.ManyToManyField(Bid, blank=True,related_name="bids")
-    comments = models.ManyToManyField(Comment,blank=True, related_name="comments")
+    bids = models.ManyToManyField(Bid, blank= True, related_name="bids")
+    comments = models.ManyToManyField(Comment,blank= True, related_name="comments")
     description = models.TextField(blank = False)
-    category = models.CharField(max_length=64, choices=Categories.choices, default='varied') 
+    category = models.ManyToManyField(Category, blank= True, related_name="categories")
     
-
     def __str__(self):
         return f"{self.title} {self.starting_bid}"
 
