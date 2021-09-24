@@ -3,22 +3,27 @@
 {% block style %}
 <style>
     .items{
+        margin-right: 40px;
         color: black;
         background-color: #fff;
-        padding: 10px;
+        padding: 20px;
         border: 1px solid #c0c0c0;
         border-style: inset;
+        font-size: 1.3em;
     }
     .items:hover{
         border-style: outset;
     }
-    a:link { text-decoration: none; }
-
-    a:visited { text-decoration: none; }
-
-    a:hover { text-decoration: none; }
-
-    a:active { text-decoration: none; } 
+    a:link,a:visited,a:hover,a:active {
+         text-decoration: none; 
+    }
+    h2{
+        margin-left: 40px;
+    }
+    img{
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
 </style>
 {% endblock %}
 
@@ -32,10 +37,10 @@
                     <div class="items">
                         <h3>{{item.title}}</h3>
                         {% if item.image %}
-                            <img alt="No image" src={{item.image}} width='150' height="120"><br>
+                            <img alt="No image" src={{item.image}} width='200' height="150"><br>
                         {% endif %}
-                        Starting bid: ${{item.starting_bid}}<br>
                         Description: {{item.description}}<br>
+                        Starting bid: ${{item.starting_bid}}<br>
                     </div>
                 </a>
             </li>

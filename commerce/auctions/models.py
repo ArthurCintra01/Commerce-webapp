@@ -3,17 +3,14 @@ from django.db import models
 from django.db.models.deletion import CASCADE, RESTRICT
 from django.db.models.fields import related
 
-
 class User(AbstractUser):
     pass
-
 
 class Category(models.Model):
     category = models.CharField(max_length=64)
 
     def __str__(self):
         return f"{self.category}"
-
 
 class Listing(models.Model):
 
@@ -39,6 +36,5 @@ class Comment(models.Model):
     comment = models.TextField()
     listing = models.ForeignKey(Listing, blank=False, on_delete=models.RESTRICT, related_name='comments')
     
-
     def __str__(self):
         return f"{self.user}: {self.comment}"
