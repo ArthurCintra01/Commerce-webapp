@@ -13,26 +13,28 @@ class Category(models.Model):
         return f"{self.category}"
 
 class Listing(models.Model):
-
+    user = models.ForeignKey(User,default=None, on_delete=models.RESTRICT, related_name="listing_user")
     title = models.CharField(max_length=64)
     image = models.URLField(max_length=500,blank=True)
     starting_bid = models.FloatField(default=0)
+    current_bid = models.FloatField(default=0)
     number_of_bids = models.IntegerField(default=0)
     description = models.TextField(blank = False)
     category = models.ForeignKey(Category,on_delete=RESTRICT, related_name="categories")
     
     def __str__(self):
-        return f"{self.title} {self.starting_bid}"
+        return f"{self.title} {self.current_bid}"
 
 class Bid(models.Model):
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="bid_user")
     bid = models.FloatField(default=0)
     listing = models.ForeignKey(Listing,blank=False, on_delete=models.RESTRICT, related_name="bids")
 
     def __str__(self):
-        return f"{self.bid}: {self.listing}"
+        return f"{self.bid} {self.listing} {self.listing}"
 
 class Comment(models.Model):
-    user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="users")
+    user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="comment_user")
     comment = models.TextField()
     listing = models.ForeignKey(Listing, blank=False, on_delete=models.RESTRICT, related_name='comments')
     

@@ -23,16 +23,29 @@ def index(request):
 
 def listing_page(request, id):
     listing = Listing.objects.get(pk=id)
-    #bid = highestBid(id)
-    bid = listing.bids.all().aggregate(Max('bid'))
+    max_bid = list(listing.bids.all().aggregate(Max('bid')).values())[0]
     return render(request, "auctions/listing.html",{
         "listing": listing,
-        "bid": bid
+        "max_bid": max_bid
     })
+
+def add_bid(request,id):
+    if request.method == 'POST':
+        listing = Listing.objects.get(pk=id)
+        bid = request.POST['bid']
+        current_user = request.user
+        new_bid = Bid(user = current_user, bid = bid , listing = listing)
+        new_bid.save()
+        max_bid = list(listing.bids.all().aggregate(Max('bid')).values())[0]
+        listing.current_bid = max_bid
+        listing.number_of_bids = listing.number_of_bids + 1
+        listing.save()
+        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
 def create_listing(request):
     if request.method == 'POST':
+        current_user = request.user
         form = CreateListingForm(request.POST)
         category = Category.objects.get(pk=int(request.POST['category']))
         if form.is_valid():
@@ -40,7 +53,7 @@ def create_listing(request):
             description = form.cleaned_data['description']
             startingBid = form.cleaned_data['starting_bid']
             img = form.cleaned_data['image']
-        new_listing = Listing(title = title, description=description, starting_bid = startingBid, image=img, category = category)
+        new_listing = Listing(user = current_user, title = title, description=description, starting_bid = startingBid, image=img, category = category)
         new_listing.save()
         return HttpResponseRedirect(reverse("index"))
     categories = Category.objects.all()
