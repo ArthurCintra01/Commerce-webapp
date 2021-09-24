@@ -23,14 +23,18 @@
                 ${{listing.current_bid}}<br>
             {% endif %}
         </div>
-        Highest Bid: ${{max_bid}}<br>
-        Number of bids: {{listing.number_of_bids}}
+        {% if bid_user == current_user %}
+        Highest Bid: ${{max_bid}} | made by you<br>
+        {% else %}
+        Highest Bid: ${{max_bid}} | made by {{bid_user}}<br>
+        {% endif %}
     </div>
     <form method='post' action="{% url 'add_bid' listing.id %}">
         {% csrf_token %}
         <input type="text" name="bid">
         <input type="submit" value="add bid">
     </form>
+    Number of bids: {{listing.number_of_bids}}
 
     <h2>Details</h2>
     <ul>
