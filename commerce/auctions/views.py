@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 from django.urls import reverse
 from django import forms
+from django.db.models import Max
 
 from .models import User, Listing, Comment, Bid, Category
  
@@ -13,11 +14,22 @@ class CreateListingForm(forms.Form):
     description = forms.CharField(label=False, widget=forms.Textarea(attrs={'class':'formfield', 'placeholder':'Description'}))
     starting_bid = forms.FloatField(label='Starting Bid', widget=forms.TextInput(attrs={'class':'formfield'}))
     image = forms.URLField(label='Image Url', widget=forms.TextInput(attrs={'class':'formfield'}))
+        
 
 def index(request):
     return render(request, "auctions/index.html",{
         "Listings": Listing.objects.all(),
     })
+
+def listing_page(request, id):
+    listing = Listing.objects.get(pk=id)
+    #bid = highestBid(id)
+    bid = listing.bids.all().aggregate(Max('bid'))
+    return render(request, "auctions/listing.html",{
+        "listing": listing,
+        "bid": bid
+    })
+
 
 def create_listing(request):
     if request.method == 'POST':

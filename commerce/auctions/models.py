@@ -29,7 +29,7 @@ class Bid(models.Model):
     listing = models.ForeignKey(Listing,blank=False, on_delete=models.RESTRICT, related_name="bids")
 
     def __str__(self):
-        return f"{self.price}: {self.number_of_bids}"
+        return f"{self.bid}: {self.listing}"
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="users")

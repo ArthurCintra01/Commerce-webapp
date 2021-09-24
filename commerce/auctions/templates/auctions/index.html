@@ -33,14 +33,14 @@
     <ul style="list-style-type: none;">
         {% for item in Listings %}
             <li>
-                <a href="">
+                <a href="listing/{{item.id}}">
                     <div class="items">
                         <h3>{{item.title}}</h3>
                         {% if item.image %}
                             <img alt="No image" src={{item.image}} width='200' height="160"><br>
                         {% endif %}
                         Description: {{item.description}}<br>
-                        Starting bid: ${{item.starting_bid}}<br>
+                        Current Price: ${{item.starting_bid}}<br>
                     </div>
                 </a>
             </li>
