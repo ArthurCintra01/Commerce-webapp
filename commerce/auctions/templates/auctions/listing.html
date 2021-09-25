@@ -2,17 +2,42 @@
 
 {% block style %}
 <style>
+    body{
+        background-color: #242424;
+        color: white;
+    }
+    textarea{
+        color: white;
+        background-color: #4a4a4a;
+        width: 300px;
+        height: 50px;
+        outline: none;
+    }
+    .comment{
+        margin-left: auto;
+        margin-right: auto;
+        font-size: 1.3em;
+        padding: 20px;
+        border: 1px solid black;
+        width: 25%;
+        list-style-type: none;
+        margin-bottom: 15px;
+    }
     .price{
         font-size: 1.3em;
-        color: blue;
+        color: #4d90fe;
     }
     .listing{
+        text-align: center;
         border: 1px solid #c0c0c0;
         border-style: inset;
+        width: 100%;
         margin: 10px;
         padding: 10px;
     }
     .field{
+        color: white;
+        background-color: #4a4a4a;
         line-height: 24px;
         border: 1px solid #c0c0c0;
         border-radius: 5px;
@@ -28,6 +53,7 @@
         background-color: #4d90fe;
         border: 1px solid #4d90fe;
         border-radius: 5px;
+        margin-bottom: 5px;
     }
     .add:hover{
         background-color: #4787ed;
@@ -82,12 +108,23 @@
         <h2>Details</h2>
         <ul>
             {% if listing.user == current_user %}
-            <li>listed by: <p style="display: inline-block; color:blue; margin-bottom: 0;">you</p></li>
+            <li>listed by: <p style="display: inline-block; color:#4d90fe; margin-bottom: 0;">you</p></li>
             {% else %}
-            <li>listed by: <p style="display: inline-block; color:blue; margin-bottom: 0;">{{listing.user}}</p></li>
+            <li>listed by: <p style="display: inline-block; color:#4d90fe; margin-bottom: 0;">{{listing.user}}</p></li>
             {% endif %}
             <li>category: {{listing.category}}</li>
         </ul>
+        <form method='post' action="{% url 'add_comment' listing.id %}" id="commentForm">
+            {% csrf_token %}
+            <textarea name="comment" form="commentForm"></textarea>
+            <input class="add" type='submit' value='add comment'>
+        </form>
         <h2>Comments</h2>
+        <br>
+        <ul>
+            {% for comment in comments %}
+                <li class="comment">{{comment}}</li>
+            {% endfor %}
+        </ul>
     </div>   
 {% endblock %}

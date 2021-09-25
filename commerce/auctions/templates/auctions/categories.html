@@ -1,12 +1,39 @@
 {% extends "auctions/layout.html" %}
 
+{% block style %}
+    <style>
+        h2{
+            margin-top: 0;
+            margin-bottom: 25px;
+        }
+        body{
+            background-color: #242424;
+            color:white;
+        }
+        li{
+            margin: 10px;
+            color: white;
+        }
+        .submit{
+            border: 1px solid white;
+            border-radius: 5px;
+            color: white;
+            background-color: #4a4a4a;
+        }
+        .submit:hover{
+            background-color: grey;
+        }
+    </style>
+{% endblock %}
+
 {% block body %}
+<h2>Categories</h2>
     <ul>
         {% for category in categories %}
             <li>
                 <form method='POST' action="{% url 'category' category.id %}">
                     {% csrf_token %}
-                    <input type="submit" value="{{category}}">
+                    <input class='submit' type="submit" value="{{category}}">
                 </form>
             </li>
         {% endfor %}

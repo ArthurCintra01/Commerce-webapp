@@ -28,6 +28,7 @@ def listing_page(request, id):
     else:
         watchlist = None
     listing = Listing.objects.get(pk=id)
+    comments = listing.comments.all()
     if listing.bids.all():
         max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
         max_bid = Bid.objects.get(bid = max_bid_value)
@@ -37,7 +38,8 @@ def listing_page(request, id):
             "max_bid": max_bid_value,
             "bid_user": bid_user,
             "current_user": current_user,
-            "watchlist": watchlist
+            "watchlist": watchlist,
+            "comments" : comments
         })
     listing.number_of_bids = 0
     listing.current_bid = listing.starting_bid
@@ -115,6 +117,15 @@ def category(request, id):
         "Listings": listings,
         "category" : category
     })
+
+def add_comment(request, id):
+    if request.method == 'POST':
+        user = request.user
+        listing = Listing.objects.get(pk=id)
+        comment = request.POST['comment'] 
+        new_comment = Comment(user=user, comment=comment, listing=listing)
+        new_comment.save()
+        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 
 def login_view(request):
