@@ -23,7 +23,10 @@ def index(request):
 
 def listing_page(request, id):
     current_user = request.user
-    watchlist = current_user.watchlist_users.all()
+    if request.user.is_authenticated:
+        watchlist = current_user.watchlist_users.all()
+    else:
+        watchlist = None
     listing = Listing.objects.get(pk=id)
     if listing.bids.all():
         max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]

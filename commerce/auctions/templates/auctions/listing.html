@@ -39,16 +39,18 @@
 {% block body %}
     <div class="listing">
         <h1>{{listing.title}}</h1>
-        {% if listing in watchlist %}
-        <form method='POST' action="{% url 'remove_watchlist' listing.id %}">
-            {% csrf_token %}
-            <input class='add' type=submit value="remove from watchlist">
-        </form>
-        {%else%}
-        <form method='POST' action="{% url 'add_watchlist' listing.id %}">
-            {% csrf_token %}
-            <input class='add' type=submit value="add to watchlist">
-        </form>
+        {% if user.is_authenticated %}
+            {% if listing in watchlist %}
+            <form method='POST' action="{% url 'remove_watchlist' listing.id %}">
+                {% csrf_token %}
+                <input class='add' type=submit value="remove from watchlist">
+            </form>
+            {%else%}
+            <form method='POST' action="{% url 'add_watchlist' listing.id %}">
+                {% csrf_token %}
+                <input class='add' type=submit value="add to watchlist">
+            </form>
+            {% endif %}
         {% endif %}
         {% if listing.image %}
             <img alt="No image" src={{listing.image}} width='200' height="160"><br>
