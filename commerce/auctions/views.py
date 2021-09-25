@@ -23,13 +23,23 @@ def index(request):
 
 def listing_page(request, id):
     listing = Listing.objects.get(pk=id)
-    max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
-    max_bid = Bid.objects.get(bid = max_bid_value)
-    bid_user = max_bid.user
+    if listing.bids.all():
+        max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
+        max_bid = Bid.objects.get(bid = max_bid_value)
+        bid_user = max_bid.user
+        return render(request, "auctions/listing.html",{
+            "listing": listing,
+            "max_bid": max_bid_value,
+            "bid_user": bid_user,
+            "current_user": request.user
+        })
+    listing.number_of_bids = 0
+    listing.current_bid = listing.starting_bid
+    listing.save()
     return render(request, "auctions/listing.html",{
         "listing": listing,
-        "max_bid": max_bid_value,
-        "bid_user": bid_user,
+        "max_bid": 0,
+        "bid_user": None,
         "current_user": request.user
     })
 

@@ -6,39 +6,53 @@
         font-size: 1.3em;
         color: blue;
     }
+    .listing{
+        border: 1px solid #c0c0c0;
+        border-style: inset;
+        margin: 10px;
+        padding: 10px;
+    }
 </style>
 {% endblock %}
 
 {% block body %}
-    <h1>{{listing.title}}</h1>
-    {% if listing.image %}
-        <img alt="No image" src={{listing.image}} width='200' height="160"><br>
-    {% endif %}
-    <div class="info">
-        {{listing.description}}<br>
-        <div class="price">
-            {% if listing.starting_bid > listing.current_bid %}
-                ${{listing.starting_bid}}<br>
+    <div class="listing">
+        <h1>{{listing.title}}</h1>
+        {% if listing.image %}
+            <img alt="No image" src={{listing.image}} width='200' height="160"><br>
+        {% endif %}
+        <div class="info">
+            {{listing.description}}<br>
+            <div class="price">
+                {% if listing.starting_bid > listing.current_bid %}
+                    ${{listing.starting_bid}}<br>
+                {% else %}
+                    ${{listing.current_bid}}<br>
+                {% endif %}
+            </div>
+            {% if bid_user == current_user %}
+            Highest Bid: ${{max_bid}} | made by you<br>
             {% else %}
-                ${{listing.current_bid}}<br>
+            Highest Bid: ${{max_bid}} | made by {{bid_user}}<br>
             {% endif %}
         </div>
-        {% if bid_user == current_user %}
-        Highest Bid: ${{max_bid}} | made by you<br>
-        {% else %}
-        Highest Bid: ${{max_bid}} | made by {{bid_user}}<br>
+        {% if user.is_authenticated %}
+        <form method='post' action="{% url 'add_bid' listing.id %}">
+            {% csrf_token %}
+            <input type="number" step="0.01" min="{{listing.current_bid}}" name="bid">
+            <input type="submit" value="add bid">
+        </form>
         {% endif %}
-    </div>
-    <form method='post' action="{% url 'add_bid' listing.id %}">
-        {% csrf_token %}
-        <input type="text" name="bid">
-        <input type="submit" value="add bid">
-    </form>
-    Number of bids: {{listing.number_of_bids}}
+        Number of bids: {{listing.number_of_bids}}
 
-    <h2>Details</h2>
-    <ul>
-        <li>listed by: {{listing.user}}</li>
-        <li>category: {{listing.category}}</li>
-    </ul>
+        <h2>Details</h2>
+        <ul>
+            {% if listing.user == current_user %}
+            <li>listed by: you</li>
+            {% else %}
+            <li>listed by: <p style="display: inline-block; color:blue; margin-bottom: 0;">{{listing.user}}</p></li>
+            {% endif %}
+            <li>category: {{listing.category}}</li>
+        </ul>
+    </div>
 {% endblock %}
