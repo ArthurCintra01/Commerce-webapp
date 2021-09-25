@@ -13,6 +13,7 @@ class Category(models.Model):
         return f"{self.category}"
 
 class Listing(models.Model):
+    watchlist = models.ManyToManyField(User,blank=True, related_name="watchlist_users")
     user = models.ForeignKey(User,default=None, on_delete=models.RESTRICT, related_name="listing_user")
     title = models.CharField(max_length=64)
     image = models.URLField(max_length=500,blank=True)
@@ -20,7 +21,7 @@ class Listing(models.Model):
     current_bid = models.FloatField(default=0)
     number_of_bids = models.IntegerField(default=0)
     description = models.TextField(blank = False)
-    category = models.ForeignKey(Category,on_delete=RESTRICT, related_name="categories")
+    category = models.ForeignKey(Category,on_delete=RESTRICT, related_name="listings_category")
     
     def __str__(self):
         return f"{self.title} {self.current_bid}"
@@ -31,7 +32,7 @@ class Bid(models.Model):
     listing = models.ForeignKey(Listing,blank=False, on_delete=models.RESTRICT, related_name="bids")
 
     def __str__(self):
-        return f"{self.bid} {self.listing} {self.listing}"
+        return f"{self.bid} {self.listing} {self.user}"
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="comment_user")
@@ -40,3 +41,4 @@ class Comment(models.Model):
     
     def __str__(self):
         return f"{self.user}: {self.comment}"
+

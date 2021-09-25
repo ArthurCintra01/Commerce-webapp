@@ -15,13 +15,15 @@ class CreateListingForm(forms.Form):
     starting_bid = forms.FloatField(label='Starting Bid', widget=forms.TextInput(attrs={'class':'formfield'}))
     image = forms.URLField(label='Image Url', widget=forms.TextInput(attrs={'class':'formfield'}))
         
-
+#views
 def index(request):
     return render(request, "auctions/index.html",{
         "Listings": Listing.objects.all(),
     })
 
 def listing_page(request, id):
+    current_user = request.user
+    watchlist = current_user.watchlist_users.all()
     listing = Listing.objects.get(pk=id)
     if listing.bids.all():
         max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
@@ -31,7 +33,8 @@ def listing_page(request, id):
             "listing": listing,
             "max_bid": max_bid_value,
             "bid_user": bid_user,
-            "current_user": request.user
+            "current_user": current_user,
+            "watchlist": watchlist
         })
     listing.number_of_bids = 0
     listing.current_bid = listing.starting_bid
@@ -74,6 +77,40 @@ def create_listing(request):
     return render(request, "auctions/createListing.html",{
         "form" : CreateListingForm(),
         "categories": categories
+    })
+
+def watchlist(request):
+    current_user = request.user
+    listings = current_user.watchlist_users.all()
+    return render(request, "auctions/watchlist.html",{
+        "Listings": listings,
+    })
+
+def add_watchlist(request, id):
+    current_user = request.user
+    listing = Listing.objects.get(pk=id)
+    current_user.watchlist_users.add(listing)
+    return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+def remove_watchlist(request, id):
+    current_user = request.user
+    listing = Listing.objects.get(pk=id)
+    current_user.watchlist_users.remove(listing)
+    return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
+
+def categories_index(request):
+    categories = Category.objects.all()
+    return render(request, "auctions/categories.html",{
+        "categories": categories
+    })
+
+def category(request, id):
+    if request.method == 'POST':   
+        category = Category.objects.get(pk=id)
+        listings = category.listings_category.all()
+        return render(request, "auctions/category_listing.html",{
+        "Listings": listings,
+        "category" : category
     })
 
 

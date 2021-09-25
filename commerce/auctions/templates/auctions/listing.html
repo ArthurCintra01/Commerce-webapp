@@ -12,12 +12,44 @@
         margin: 10px;
         padding: 10px;
     }
+    .field{
+        line-height: 24px;
+        border: 1px solid #c0c0c0;
+        border-radius: 5px;
+        width: 25%;
+    }
+    .field:focus{
+        outline: none;
+    }
+    .add{
+        padding: 5px;
+        line-height: 16px;
+        color: white;
+        background-color: #4d90fe;
+        border: 1px solid #4d90fe;
+        border-radius: 5px;
+    }
+    .add:hover{
+        background-color: #4787ed;
+        border-style: outset;
+    }
 </style>
 {% endblock %}
 
 {% block body %}
     <div class="listing">
         <h1>{{listing.title}}</h1>
+        {% if listing in watchlist %}
+        <form method='POST' action="{% url 'remove_watchlist' listing.id %}">
+            {% csrf_token %}
+            <input class='add' type=submit value="remove from watchlist">
+        </form>
+        {%else%}
+        <form method='POST' action="{% url 'add_watchlist' listing.id %}">
+            {% csrf_token %}
+            <input class='add' type=submit value="add to watchlist">
+        </form>
+        {% endif %}
         {% if listing.image %}
             <img alt="No image" src={{listing.image}} width='200' height="160"><br>
         {% endif %}
@@ -39,8 +71,8 @@
         {% if user.is_authenticated %}
         <form method='post' action="{% url 'add_bid' listing.id %}">
             {% csrf_token %}
-            <input type="number" step="0.01" min="{{listing.current_bid}}" name="bid">
-            <input type="submit" value="add bid">
+            <input class='field' type="number" step="0.01" min="{{listing.current_bid}}" name="bid">
+            <input class='add' type="submit" value="add bid">
         </form>
         {% endif %}
         Number of bids: {{listing.number_of_bids}}
@@ -48,11 +80,12 @@
         <h2>Details</h2>
         <ul>
             {% if listing.user == current_user %}
-            <li>listed by: you</li>
+            <li>listed by: <p style="display: inline-block; color:blue; margin-bottom: 0;">you</p></li>
             {% else %}
             <li>listed by: <p style="display: inline-block; color:blue; margin-bottom: 0;">{{listing.user}}</p></li>
             {% endif %}
             <li>category: {{listing.category}}</li>
         </ul>
-    </div>
+        <h2>Comments</h2>
+    </div>   
 {% endblock %}
