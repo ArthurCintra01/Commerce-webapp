@@ -22,6 +22,8 @@ class Listing(models.Model):
     number_of_bids = models.IntegerField(default=0)
     description = models.TextField(blank = False)
     category = models.ForeignKey(Category,on_delete=RESTRICT, related_name="listings_category")
+    is_active = models.BooleanField(default=True)
+    winner = models.ForeignKey(User,default=None, on_delete=models.RESTRICT, related_name="winner")
     
     def __str__(self):
         return f"{self.title} {self.current_bid}"
@@ -29,7 +31,7 @@ class Listing(models.Model):
 class Bid(models.Model):
     user = models.ForeignKey(User, on_delete=models.RESTRICT, related_name="bid_user")
     bid = models.FloatField(default=0)
-    listing = models.ForeignKey(Listing,blank=False, on_delete=models.RESTRICT, related_name="bids")
+    listing = models.ForeignKey(Listing,blank=False, on_delete=models.CASCADE, related_name="bids")
 
     def __str__(self):
         return f"{self.bid} {self.listing} {self.user}"

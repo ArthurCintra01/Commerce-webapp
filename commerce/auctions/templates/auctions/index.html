@@ -36,24 +36,26 @@
     <br>
     <ul style="list-style-type: none;">
         {% for item in Listings %}
-            <li>
-                <a href="listing/{{item.id}}">
-                    <div class="items">
-                        <h3>{{item.title}}</h3>
-                        {% if item.image %}
-                            <img alt="No image" src={{item.image}} width='200' height="160"><br>
-                        {% endif %}
-                        Description: {{item.description}}<br>
-                        {% if item.starting_bid > item.current_bid %}
-                        Current Price: ${{item.starting_bid}}<br>
-                        {% else %}
-                        Current Price: ${{item.current_bid}}<br>
-                        {% endif %}
-                    </div>
-                </a>
-            </li>
-            <br>
-            {% empty %}
+            {% if item.is_active %}
+                <li>
+                    <a href="listing/{{item.id}}">
+                        <div class="items">
+                            <h3>{{item.title}}</h3>
+                            {% if item.image %}
+                                <img alt="No image" src={{item.image}} width='200' height="160"><br>
+                            {% endif %}
+                            Description: {{item.description}}<br>
+                            {% if item.starting_bid > item.current_bid %}
+                            Current Price: ${{item.starting_bid}}<br>
+                            {% else %}
+                            Current Price: ${{item.current_bid}}<br>
+                            {% endif %}
+                        </div>
+                    </a>
+                </li>
+                <br>
+                {% endif %}
+        {% empty %}
             <li>No listings available</li>
         {% endfor %}
     </ul>

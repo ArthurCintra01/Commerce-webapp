@@ -31,7 +31,7 @@ def listing_page(request, id):
     comments = listing.comments.all()
     if listing.bids.all():
         max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
-        max_bid = Bid.objects.get(bid = max_bid_value)
+        max_bid = Bid.objects.get(bid = max_bid_value, listing=listing)
         bid_user = max_bid.user
         return render(request, "auctions/listing.html",{
             "listing": listing,
@@ -48,7 +48,9 @@ def listing_page(request, id):
         "listing": listing,
         "max_bid": 0,
         "bid_user": None,
-        "current_user": request.user
+        "current_user": request.user,
+        "watchlist": watchlist,
+        "comments" : comments
     })
 
 def add_bid(request,id):
@@ -75,7 +77,7 @@ def create_listing(request):
             description = form.cleaned_data['description']
             startingBid = form.cleaned_data['starting_bid']
             img = form.cleaned_data['image']
-        new_listing = Listing(user = current_user, title = title, description=description, starting_bid = startingBid, image=img, category = category)
+        new_listing = Listing(user = current_user, title = title, description=description, starting_bid = startingBid, image=img, category = category, winner = request.user)
         new_listing.save()
         return HttpResponseRedirect(reverse("index"))
     categories = Category.objects.all()
@@ -83,6 +85,18 @@ def create_listing(request):
         "form" : CreateListingForm(),
         "categories": categories
     })
+
+def close_listing(request, id):
+    if request.method == 'POST':
+        current_user = request.user
+        listing = Listing.objects.get(pk=id)
+        max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
+        max_bid = Bid.objects.get(bid = max_bid_value, listing=listing)
+        bid_user = max_bid.user
+        listing.winner = bid_user
+        listing.is_active = False
+        listing.save()
+        return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 def watchlist(request):
     current_user = request.user
