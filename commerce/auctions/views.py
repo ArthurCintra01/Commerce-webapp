@@ -125,7 +125,7 @@ def remove_watchlist(request, id):
     return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 def categories_index(request):
-    categories = Category.objects.all()
+    categories = Category.objects.exclude(category="No Category").all()
     return render(request, "auctions/categories.html",{
         "categories": categories
     })
