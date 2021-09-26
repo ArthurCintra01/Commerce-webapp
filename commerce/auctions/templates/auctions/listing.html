@@ -114,11 +114,13 @@
             {% endif %}
             <li>category: {{listing.category}}</li>
         </ul>
+        {% if user.is_authenticated %}
         <form method='post' action="{% url 'add_comment' listing.id %}" id="commentForm">
             {% csrf_token %}
             <textarea name="comment" form="commentForm"></textarea>
             <input class="add" type='submit' value='add comment'>
         </form>
+        {% endif %}
         <h2>Comments</h2>
         <br>
         <ul>
