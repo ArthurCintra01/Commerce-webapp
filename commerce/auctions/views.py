@@ -95,14 +95,18 @@ def create_listing(request):
 
 def close_listing(request, id):
     if request.method == 'POST':
-        current_user = request.user
         listing = Listing.objects.get(pk=id)
-        max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
-        max_bid = Bid.objects.get(bid = max_bid_value, listing=listing)
-        bid_user = max_bid.user
-        listing.winner = bid_user
-        listing.is_active = False
-        listing.save()
+        if (listing.bids.all()):
+            max_bid_value = list(listing.bids.all().aggregate(Max('bid')).values())[0]
+            max_bid = Bid.objects.get(bid = max_bid_value, listing=listing)
+            bid_user = max_bid.user
+            listing.winner = bid_user
+            listing.is_active = False
+            listing.save()
+        else:
+            listing.winner = listing.user
+            listing.is_active = False
+            listing.save()
         return HttpResponseRedirect(reverse("listing", args=(listing.id,)))
 
 def watchlist(request):

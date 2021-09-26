@@ -31,7 +31,7 @@
         text-align: center;
         border: 1px solid #c0c0c0;
         border-style: inset;
-        width: 100%;
+        width: 99%;
         margin: 10px;
         padding: 10px;
     }
@@ -92,7 +92,7 @@
             {% endif %}
         {% endif %}
         {% if listing.image %}
-            <img alt="No image" src={{listing.image}} width='200' height="160"><br>
+            <img alt="No image" src={{listing.image}} style="max-width: 500px; max-height: 250px;"><br>
         {% endif %}
         <div class="info">
             {{listing.description}}<br>
