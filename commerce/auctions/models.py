@@ -21,9 +21,9 @@ class Listing(models.Model):
     current_bid = models.FloatField(default=0)
     number_of_bids = models.IntegerField(default=0)
     description = models.TextField(blank = False)
-    category = models.ForeignKey(Category,on_delete=RESTRICT, related_name="listings_category")
+    category = models.ForeignKey(Category,on_delete=RESTRICT, blank=True, related_name="listings_category")
     is_active = models.BooleanField(default=True)
-    winner = models.ForeignKey(User,default=None, on_delete=models.RESTRICT, related_name="winner")
+    winner = models.ForeignKey(User,default=None, blank=True, on_delete=models.RESTRICT, related_name="winner")
     
     def __str__(self):
         return f"{self.title} {self.current_bid}"
