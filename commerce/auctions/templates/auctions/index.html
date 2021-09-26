@@ -41,7 +41,7 @@
                     <div class="items">
                         <h3>{{item.title}}</h3>
                         {% if item.image %}
-                            <img alt="No image" src={{item.image}} style="max-width: 500px; max-height: 250px;"><br>
+                            <img alt="No image available" src={{item.image}} style="max-width: 500px; max-height: 250px;"><br>
                         {% endif %}
                         Description: {{item.description}}<br>
                         {% if item.starting_bid > item.current_bid %}
