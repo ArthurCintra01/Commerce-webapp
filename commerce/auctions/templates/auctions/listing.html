@@ -53,7 +53,7 @@
         background-color: #4d90fe;
         border: 1px solid #4d90fe;
         border-radius: 5px;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
     }
     .add:hover{
         background-color: #4787ed;
@@ -71,6 +71,9 @@
         background-color: rgb(1, 199, 1);
         border-radius: 5px;
         color:black;
+    }
+    .info{
+        margin: 5px;
     }
 </style>
 {% endblock %}
@@ -128,7 +131,6 @@
         </form>
         {% endif %}
         Number of bids: {{listing.number_of_bids}}
-
         <h2>Details</h2>
         <div class="details">
             {% if listing.user == current_user %}
