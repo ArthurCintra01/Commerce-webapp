@@ -63,6 +63,15 @@
         color:#4d90fe;
         font-size: 1.5em;
     }
+    .details{
+        font-size: 1.3em;
+    }
+    #close{
+        font-size: 0.8em;
+        background-color: rgb(1, 199, 1);
+        border-radius: 5px;
+        color:black;
+    }
 </style>
 {% endblock %}
 
@@ -78,7 +87,7 @@
             {%else%}
                 <form method='POST' action="{% url 'add_watchlist' listing.id %}">
                     {% csrf_token %}
-                    <input class='add' type=submit value="add to watchlist">
+                    <input class="add" type=submit value="add to watchlist">
                 </form>
             {% endif %}
         {% endif %}
@@ -121,23 +130,24 @@
         Number of bids: {{listing.number_of_bids}}
 
         <h2>Details</h2>
-        <ul style="list-style-type: none;">
+        <div class="details">
             {% if listing.user == current_user %}
-            <li>
-                listed by: <span style="display: inline-block; color:#4d90fe; margin-bottom: 0;">you</span>
+                listed by: <span style="color:#4d90fe; margin-bottom: 0;">you</span>
                 {% if listing.is_active %}
                     <form style="display:inline-block;" method='POST' action="{% url 'close_listing' listing.id %}">
                         {% csrf_token %}
-                        <input class='add' type=submit value="close auction">
+                        <input id="close" type=submit value="close auction">
                     </form>
                 {% endif %}
-            </li>
+                <br>
             {% else %}
-            <li>listed by: <span style="display: inline-block; color:#4d90fe; margin-bottom: 0;">{{listing.user}}</span></li>
+                listed by: <span style="color:#4d90fe; margin-bottom: 0;">{{listing.user}}</span>
+                <br>
             {% endif %}
-            <li>category: <span style="display: inline-block; color:#4d90fe; margin-bottom: 0;">{{listing.category}}</span></li>
-        </ul>
+            category: <span style="color:#4d90fe; margin-bottom: 0;">{{listing.category}}</span>
+        </div>
         {% if user.is_authenticated and listing.is_active %}
+        <br>
         <form method='post' action="{% url 'add_comment' listing.id %}" id="commentForm">
             {% csrf_token %}
             <textarea name="comment" form="commentForm"></textarea>
@@ -145,7 +155,6 @@
         </form>
         {% endif %}
         <h2>Comments</h2>
-        <br>
         <ul>
             {% for comment in comments %}
                 <li class="comment">{{comment}}</li>

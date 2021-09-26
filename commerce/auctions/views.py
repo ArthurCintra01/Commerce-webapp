@@ -18,7 +18,14 @@ class CreateListingForm(forms.Form):
 #views
 def index(request):
     return render(request, "auctions/index.html",{
-        "Listings": Listing.objects.all(),
+        "Listings": Listing.objects.exclude(is_active = False).all(),
+        "header" : "Active Listings"
+    })
+
+def closed_listings(request):
+    return render(request, "auctions/index.html",{
+        "Listings": Listing.objects.exclude(is_active = True).all(),
+        "header" : "Closed Auctions"
     })
 
 def listing_page(request, id):
