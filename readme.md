@@ -1,13 +1,13 @@
 # Projeto e-commerce webapp
 
+Consiste em um site de vendas online no estilo de leilão, onde qualquer usuario pode listar produtos
+para serem leiloados, e fazer lances em produtos de outros usuarios.
+
 ## Tecnologias
 
 * Django Web Framework
 * SQLite3
 * HTML e CSS
-
-Consiste em um site de vendas online no estilo de leilão, onde qualquer usuario pode listar produtos
-para serem leiloados, e fazer lances em produtos de outros usuarios.
 
 ## Features do site
 
@@ -17,9 +17,9 @@ para serem leiloados, e fazer lances em produtos de outros usuarios.
 * Watchlist
 * Categories
 
-## Para iniciar o servidor:
+## Para inicializar o servidor:
 
-execute dentro da pasta do aplicativo:
+execute dentro do diretorio do aplicativo:
 
 ```
 python manage.py runserver
