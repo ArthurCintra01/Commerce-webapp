@@ -19,7 +19,7 @@ para serem leiloados, e fazer lances em produtos de outros usuarios.
 
 ## Para inicializar o servidor:
 
-execute dentro do diretorio do aplicativo:
+execute dentro da pasta commerce:
 
 ```
 python manage.py runserver
