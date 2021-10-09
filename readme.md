@@ -17,7 +17,7 @@ para serem leiloados, e fazer lances em produtos de outros usuarios.
 * Watchlist
 * Categories
 
-## Para inicializar o servidor:
+## Para inicializar:
 
 execute dentro da pasta commerce:
 
