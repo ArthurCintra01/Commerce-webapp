@@ -22,5 +22,11 @@ para serem leiloados, e fazer lances em produtos de outros usuarios.
 execute dentro da pasta commerce:
 
 ```
+python manage.py makemigrations
+```
+```
+python manage.py migrate
+```
+```
 python manage.py runserver
 ```
